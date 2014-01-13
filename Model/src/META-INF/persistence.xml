@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+             version="1.0">
+  <persistence-unit name="SchedulePUFacade" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>edu.school.jpa.Classroom</class>
+    <class>edu.school.jpa.Availability</class>
+    <class>edu.school.jpa.ClassGroupSubjectMap</class>
+    <class>edu.school.jpa.ClassSubjectCount</class>
+    <class>edu.school.jpa.TeacherSubjectMap</class>
+    <class>edu.school.jpa.User</class>
+    <class>edu.school.jpa.Teacher</class>
+    <class>edu.school.jpa.Subject</class>
+    <class>edu.school.jpa.ClassGroup</class>
+    <class>edu.school.jpa.Lesson</class>
+    <properties>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.url"
+                value="jdbc:mysql://localhost:3306/timetable"/>
+      <property name="javax.persistence.jdbc.user" value="admin4UHjjJU"/>
+      <property name="javax.persistence.jdbc.password"
+                value="CC8E35CD8834D0CCC0D39CEC544E03971D2D50DA98DD162F6D17626DF671F137"/>
+      <property name="eclipselink.logging.level" value="FINER"/>
+      <property name="eclipselink.weaving" value="false"/>
+      <property name="eclipselink.target-server" value="WebLogic_10"/>
+    </properties>
+  </persistence-unit>
+  <persistence-unit name="SchedulePU">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>java:/app/jdbc/jdbc/Openshift-TimetableDS</jta-data-source>
+    <class>edu.school.jpa.Availability</class>
+    <class>edu.school.jpa.ClassGroup</class>
+    <class>edu.school.jpa.ClassGroupSubjectMap</class>
+    <class>edu.school.jpa.ClassSubjectCount</class>
+    <class>edu.school.jpa.Classroom</class>
+    <class>edu.school.jpa.Lesson</class>
+    <class>edu.school.jpa.Subject</class>
+    <class>edu.school.jpa.Teacher</class>
+    <class>edu.school.jpa.TeacherSubjectMap</class>
+    <class>edu.school.jpa.User</class>
+    <class>edu.school.jpa.TimeScheduleMaster</class>
+    <class>edu.school.jpa.TimeScheduleUnit</class>
+    <properties>
+      <property name="eclipselink.target-server" value="JBoss"/>
+      <property name="eclipselink.target-database" value="MySQL"/>
+      <property name="javax.persistence.jtaDataSource"
+                value="java:/app/jdbc/jdbc/Openshift-TimetableDS"/>
+    </properties>
+  </persistence-unit>
+</persistence>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <view id="timeSchedule">
+    <page>/timeSchedule.jspx</page>
+  </view>
+  <view id="dataAdmin">
+    <page>/dataAdmin.jspx</page>
+  </view>
+  <view id="download">
+    <page>/download.jspx</page>
+  </view>
+  <view id="showErrors">
+    <page>/showErrors.jspx</page>
+  </view>
+  <control-flow-rule id="__1">
+    <from-activity-id id="__2">*</from-activity-id>
+    <control-flow-case id="__10">
+      <from-outcome id="__11">timeSchedule</from-outcome>
+      <to-activity-id id="__9">timeSchedule</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__12">
+      <from-outcome id="__14">dataAdmin</from-outcome>
+      <to-activity-id id="__13">dataAdmin</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__5">
+      <from-outcome id="__6">dialog:download</from-outcome>
+      <to-activity-id id="__4">download</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__7">
+      <from-outcome id="__15">dialog:showErrors</from-outcome>
+      <to-activity-id id="__8">showErrors</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
+</adfc-config>

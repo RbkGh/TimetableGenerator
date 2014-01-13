@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+  <af:panelCollection id="pcT" featuresOff="statusBar detach viewMenu"
+                      defaultToolbarItemDisplay="icon"
+                      partialTriggers="tAdd ::pcT:tEdit lSubject:mtEdit tDelete">
+    <f:facet name="toolbar">
+      <af:toolbar id="ttb">
+        <af:popup id="sbjEdit" launcherVar="source"
+                  eventContext="launcher"
+                  contentDelivery="lazyUncached"
+                  popupFetchListener="#{subjectController.selectPFL}"
+                  binding="#{subjectController.tableEditPopup}">
+          <af:setPropertyListener from="#{source.attributes.which}"
+                                  to="#{pageFlowScope.which}"
+                                  type="popupFetch"/>
+          <af:dialog id="tchD" title="#{pageFlowScope.which=='Add' ? 'Create New' : 'Modify/Review'} Subject"
+                     type="none" stretchChildren="first" resize="on" contentWidth="290" contentHeight="200"
+                     dialogListener="#{subjectController.onEditClose}">
+            <af:panelStretchLayout id="tchDL" dimensionsFrom="children" topHeight="0px" startWidth="0px">
+              <f:facet name="center">
+                <af:panelGroupLayout id="tchDG" layout="vertical">
+                  <af:panelFormLayout labelWidth="40%" id="tchPfA">
+                    <af:inputText label="Name" id="tchItA" readOnly="#{subjectController.readOnly}"
+                                  value="#{subjectController.current.name}"/>
+                    <af:inputText label="Short Name" id="tchItB" readOnly="#{subjectController.readOnly}"
+                                  value="#{subjectController.current.shortName}"/>
+                    <af:inputText label="Weight" id="tchItC" readOnly="#{subjectController.readOnly}"
+                                  value="#{subjectController.current.weight}" columns="5" rows="1"/>
+                    <af:outputText id="sbjWH" value="Numeric value. Subjects with higher weight will be scheduled earlier in the day" inlineStyle="font-size: 8pt;"/>
+                    <af:spacer id="tipSPa" height="6px"/>
+                    <af:selectOneChoice id="tchItD" label="Preffered Classroom" readOnly="#{subjectController.readOnly}"
+                                  value="#{subjectController.current.classroom}">
+                      <f:selectItems value="#{classroomController.itemsAvailableSelectOneObject}" id="tchItDA"/>
+                    </af:selectOneChoice>
+                  </af:panelFormLayout>
+                </af:panelGroupLayout>
+              </f:facet>
+            </af:panelStretchLayout>
+            <f:facet name="buttonBar">
+              <af:panelGroupLayout id="sSnpBB"
+                                   layout="horizontal">
+                <af:commandButton text="Save"
+                                  id="aMSave"
+                                  actionListener="#{subjectController.saveAL}"
+                                  rendered="#{pageFlowScope.which!='view'}"
+                                  partialSubmit="true"/>
+                <af:commandButton text="#{pageFlowScope.which!='view' ? 'Cancel' : 'Close'}" id="tchCl"
+                                  actionListener="#{subjectController.cancelAL}"
+                                  partialSubmit="true"/>
+              </af:panelGroupLayout>
+            </f:facet>
+          </af:dialog>
+        </af:popup>
+        <af:commandButton id="tAdd" action="newSubject" text="Add Subject" partialSubmit="true">
+          <af:clientAttribute value="add" name="which"/>
+          <af:showPopupBehavior popupId="sbjEdit" triggerType="action"/>
+        </af:commandButton>
+        <af:commandButton id="tEdit" action="editSubject" text="Edit" partialSubmit="true">
+          <af:clientAttribute value="edit" name="which"/>
+          <af:showPopupBehavior popupId="sbjEdit" triggerType="action"/>
+        </af:commandButton>
+        <af:commandButton id="tDelete" text="Delete" partialSubmit="true">
+          <af:clientAttribute name="name" value="#{subjectController.selected.name}"/>
+          <af:showPopupBehavior popupId="dltConfrm" triggerType="action"/>
+        </af:commandButton>
+        <af:popup id="dltConfrm" eventContext="launcher" binding="#{subjectController.confirmDeletePopup}"
+                                        launcherVar="s"
+                  popupFetchListener="#{subjectController.selectPFL}">
+          <af:setPropertyListener from="#{s.attributes.name}" to="#{viewScope.name}" type="popupFetch"/>
+          <af:dialog id="dltDlg" dialogListener="#{subjectController.onConfirmDeleteClose}" 
+                    title="Confirm Delete" type="okCancel">
+            <af:outputText id="dltTxt" value="You are going to delete subject #{s.attributes.name}. Proceed?"/>
+          </af:dialog>
+        </af:popup>
+      </af:toolbar>
+    </f:facet>
+    <af:table id="lSubject" value="#{subjectController.items}" var="sbj"
+              rowBandingInterval="1"
+              autoHeightRows="0"
+              rowSelection="single"
+              columnStretching="none"
+              partialTriggers="::tAdd ::tEdit mtEdit ::tDelete"
+              binding="#{subjectController.table}">
+        <f:facet name="contextMenu">
+          <af:popup id="tchCtxMenu"
+                    contentDelivery="lazyUncached">
+            <af:menu id="acm_2">
+              <af:commandMenuItem id="mtEdit"
+                                  text="Edit"
+                                  partialSubmit="true"
+                                  actionListener="#{subjectController.editAL}">
+                <af:clientAttribute value="edit" name="which"/>
+                <af:showPopupBehavior popupId="::sbjEdit" triggerType="action"/>
+              </af:commandMenuItem>
+              <af:commandMenuItem id="mtDelete"
+                                  text="Delete"
+                                  partialSubmit="true"
+                          actionListener="#{subjectController.deleteAL}">
+                <af:clientAttribute name="name" value="#{sbj.name}"/>
+                <af:showPopupBehavior popupId="::dltConfrm" triggerType="action"/>
+              </af:commandMenuItem>
+            </af:menu>
+          </af:popup>
+        </f:facet>
+      <af:column id="c1" rowHeader="unstyled" headerText="Name">
+        <af:commandLink id="mtView" text="#{sbj.name}"
+                    actionListener="#{subjectController.selectAL}">
+          <af:clientAttribute value="view" name="which"/>
+          <af:showPopupBehavior popupId="::sbjEdit" triggerType="action"/>
+        </af:commandLink>
+      </af:column>
+      <af:column id="c2" headerText="Short Name">
+        <af:outputText id="c2a" value="#{sbj.shortName}"/>
+      </af:column>
+      <af:column id="c3" headerText="Weight">
+        <af:outputText id="c3a" value="#{sbj.weight}"/>
+      </af:column>
+      <af:column id="c4" headerText="Preferred Classroom">
+        <af:outputText id="c4a" value="#{sbj.classroom.name}"/>
+      </af:column>
+    </af:table>
+  </af:panelCollection>
+</jsp:root>

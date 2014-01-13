@@ -1,0 +1,30 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<References xmlns="http://xmlns.oracle.com/adf/jndi">
+   <Reference name="Openshift-Timetable" className="oracle.jdeveloper.db.adapter.DatabaseProvider" credentialStoreKey="Openshift-Timetable" xmlns="">
+      <Factory className="oracle.jdeveloper.db.adapter.DatabaseProviderFactory"/>
+      <RefAddresses>
+         <StringRefAddr addrType="subtype">
+            <Contents>MYSQL</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="user">
+            <Contents>admin4UHjjJU</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="port">
+            <Contents>3306</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="hostname">
+            <Contents>localhost</Contents>
+         </StringRefAddr>
+         <SecureRefAddr addrType="password"/>
+         <StringRefAddr addrType="DeployPassword">
+            <Contents>true</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="driver">
+            <Contents>com.mysql.jdbc.Driver</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="dataSourceName">
+            <Contents>timetable</Contents>
+         </StringRefAddr>
+      </RefAddresses>
+   </Reference>
+</References>

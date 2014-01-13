@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <f:view>
+    <af:document id="d1">
+      <af:form id="f1">
+        <af:pageTemplate viewId="/template/tabbedPage.jspx" id="pt1">
+          <f:facet name="dashboard">
+            <af:panelStretchLayout id="sMain">
+              <f:facet name="top">
+                <af:toolbox id="sTB">
+                  <af:toolbar id="sTBa">
+                    <af:commandButton id="cb3" action="#{scheduleController.initialize}" text="Generate New Schedule">
+                      <af:setPropertyListener from="#{'generate'}" to="#{pageFlowScope.actionType}" type="action"/>
+                    </af:commandButton>
+                    <af:spacer id="spAA" width="20px"/>
+                    <af:group id="g1">
+                    <af:commandButton text="Store to DB" id="cb0">
+                      <af:showPopupBehavior popupId="storeDB" triggerType="action"/>
+                    </af:commandButton>
+                    <af:commandButton text="Load from DB" id="cb1">
+                      <af:showPopupBehavior popupId="loadDBP" triggerType="action"/>
+                    </af:commandButton>
+                    </af:group>
+                    <af:group id="g2">
+                      <af:menuBar id="dwnlPG">
+                        <af:menu id="dwnlMN" text="Download as">
+                          <af:commandMenuItem text="Download as HTML..." useWindow="true" windowEmbedStyle="window" windowHeight="500" windowWidth="700" 
+                                action="dialog:download"
+                                              actionListener="#{scheduleController.prepareDownloadAL}"
+                               id="glink2" icon="/images/html-icon.jpg" inlineStyle="width:22px; height:22px;"
+                               disabled="false">
+                            <af:setActionListener from="schedule.download?format=html" to="#{pageFlowScope.downloadUrl}"/>
+                          </af:commandMenuItem>
+                          <af:commandMenuItem text="Download as XLS..." useWindow="true" windowEmbedStyle="window" windowHeight="500" windowWidth="700" 
+                                action="dialog:download"
+                                              actionListener="#{scheduleController.prepareDownloadAL}"
+                               id="glink5" icon="/images/xls-icon.jpg" inlineStyle="width:22px; height:22px;"
+                               disabled="false">
+                            <af:setActionListener from="schedule.download?format=xls" to="#{pageFlowScope.downloadUrl}"/>
+                          </af:commandMenuItem>
+                          <af:commandMenuItem text="Download as XML..." useWindow="true" windowEmbedStyle="window" windowHeight="500" windowWidth="700" 
+                                action="dialog:download"
+                                              actionListener="#{scheduleController.prepareDownloadAL}"
+                               id="glink6" icon="/images/xml-icon.jpg" inlineStyle="width:22px; height:22px;"
+                               disabled="false">
+                            <af:setActionListener from="schedule.download?format=xml" to="#{pageFlowScope.downloadUrl}"/>
+                          </af:commandMenuItem>
+                          <af:commandMenuItem text="Download as PDF..." useWindow="true" windowEmbedStyle="window" windowHeight="500" windowWidth="700" 
+                                action="dialog:download"
+                                              actionListener="#{scheduleController.prepareDownloadAL}"
+                               id="glink3" icon="/images/pdf-icon.jpg" inlineStyle="width:22px; height:22px;"
+                               disabled="false">
+                            <af:setActionListener from="schedule.download?format=pdf" to="#{pageFlowScope.downloadUrl}"/>
+                          </af:commandMenuItem>
+                          <af:commandMenuItem text="Download as RTF..." useWindow="true" windowEmbedStyle="window" windowHeight="500" windowWidth="700" 
+                                action="dialog:download"
+                                              actionListener="#{scheduleController.prepareDownloadAL}"
+                               id="glink4" icon="/images/rtf-icon.jpg" inlineStyle="width:22px; height:22px;"
+                               disabled="false">
+                            <af:setActionListener from="schedule.download?format=rtf" to="#{pageFlowScope.downloadUrl}"/>
+                          </af:commandMenuItem>
+                        </af:menu>
+                      </af:menuBar>
+                    </af:group>
+                    <af:group id="g3">
+                      <af:commandButton id="errA" text="Show Errors" useWindow="true" windowEmbedStyle="window" windowHeight="500" windowWidth="700" action="dialog:showErrors"/>
+                    </af:group>
+                  </af:toolbar>
+                  <af:popup id="storeDB"
+                            binding="#{scheduleController.storeDbPopup}" contentDelivery="lazy" launcherVar="v" eventContext="launcher"
+                            popupFetchListener="#{scheduleController.storeDbFetchListener}">
+                    <af:dialog id="storeDG" contentHeight="400" contentWidth="600" type="none" title="Store Schedule to Database">
+                      <af:outputText id="storeHD" value="Available versions"/>
+                      <af:table id="storeTB" value="#{scheduleController.storedVersions}"
+                                binding="#{scheduleController.storeDbTable}"
+                                var="row" summary="Stored versions" emptyText="No schedules stored."
+                                rowBandingInterval="1" rowSelection="single" rows="0"
+                                styleClass="AFStretchWidth" autoHeightRows="0"
+                                columnStretching="last">
+                        <af:column id="sc1" rowHeader="unstyled" width="15%" sortable="false" headerText="Version">
+                          <af:outputText id="scc1" value="#{row.version}"/>
+                        </af:column>
+                        <af:column id="sc2" width="20%" sortable="false" headerText="Date">
+                          <af:outputText id="scc2" value="#{row.date_created}"/>
+                        </af:column>
+                        <af:column id="sc3" width="65%" sortable="false" headerText="Comment">
+                          <af:outputText id="scc3" value="#{row.comment}"/>
+                        </af:column>
+                      </af:table>
+                      <af:spacer id="storeSPa" height="8px"/>
+                      <af:inputText label="Comment:" id="storeCM" value="#{scheduleController.storedVersionComment}" rows="5" columns="80" immediate="true"/>
+                      <af:spacer id="storeSPb" height="8px"/>
+                      <f:facet name="buttonBar">
+                         <af:panelGroupLayout layout="horizontal" id="storeBT">
+                           <af:commandButton text="Save New" id="saveDB" actionListener="#{scheduleController.storeToDB}" partialSubmit="true"/>
+                           <af:commandButton text="Update Selected" id="updateDB" actionListener="#{scheduleController.storeToDB}" partialSubmit="true"/>
+                           <af:commandButton text="Cancel" id="cancelDB" actionListener="#{scheduleController.storeToDB}" partialSubmit="true"/>           
+                         </af:panelGroupLayout>
+                      </f:facet>
+                    </af:dialog>
+                  </af:popup>
+                  <af:popup id="loadDBP" launcherVar="v" contentDelivery="lazy" eventContext="launcher"
+                            binding="#{scheduleController.loadDbPopup}"
+                            popupFetchListener="#{scheduleController.loadDbFetchListener}">
+                    <af:dialog id="loadDL" type="none" contentHeight="400" contentWidth="600" title="Load Schedule from Database"
+                               dialogListener="#{scheduleController.loadDbDialogListener}">
+                      <af:outputText id="loadHD" value="Available versions"/>
+                      <af:table id="loadTB" value="#{scheduleController.storedVersions}"
+                                binding="#{scheduleController.loadDbTable}"
+                                var="row" summary="Stored versions" emptyText="No schedules stored."
+                                rowBandingInterval="1" rowSelection="single" rows="0"
+                                styleClass="AFStretchWidth" autoHeightRows="0" width="100%"
+                                columnStretching="last">
+                        <af:column id="rc1" rowHeader="unstyled" width="15%" sortable="false" headerText="Version">
+                          <af:outputText id="rcc1" value="#{row.version}"/>
+                        </af:column>
+                        <af:column id="rc2" width="20%" sortable="false" headerText="Date">
+                          <af:outputText id="rcc2" value="#{row.date_created}"/>
+                        </af:column>
+                        <af:column id="rc3" width="65%" sortable="false" headerText="Comment">
+                          <af:outputText id="rcc3" value="#{row.comment}"/>
+                        </af:column>
+                      </af:table>
+                      <af:spacer id="loadSPa" height="8px"/>
+                      <f:facet name="buttonBar">
+                         <af:panelGroupLayout layout="horizontal" id="loadBT">
+                           <af:commandButton text="Load Selected" id="loadDB" actionListener="#{scheduleController.loadFromDB}" partialSubmit="true"/>
+                           <af:commandButton text="Cancel" id="cancelLD" actionListener="#{scheduleController.loadFromDB}" partialSubmit="true"/>           
+                         </af:panelGroupLayout>
+                      </f:facet>
+                    </af:dialog>
+                  </af:popup>
+                  <af:popup id="downLoad"
+                            binding="#{scheduleController.downloadPopup}" contentDelivery="lazy" launcherVar="v" eventContext="launcher"
+                            popupFetchListener="#{scheduleController.downloadFetchListener}">
+                    <af:noteWindow id="dwnDlg">
+                    </af:noteWindow>
+                  </af:popup>
+                </af:toolbox>
+              </f:facet>
+              <f:facet name="center">
+                <af:panelTabbed id="ptb1" styleClass="AFStretchWidth">
+                  <af:showDetailItem text="Monday" id="sdi1"
+                                     disclosureListener="#{scheduleController.showMonday}"
+                                     styleClass="AFStretchWidth">
+                    <f:subview id="mon">
+                      <jsp:include page="/daySchedule.jsff"/>
+                    </f:subview>
+                  </af:showDetailItem>
+                  <af:showDetailItem text="Tuesday" id="sdi2"
+                                     disclosureListener="#{scheduleController.showTuesday}"
+                                     styleClass="AFStretchWidth">
+                    <f:subview id="tue">
+                      <jsp:include page="/daySchedule.jsff"/>
+                    </f:subview>
+                  </af:showDetailItem>
+                  <af:showDetailItem text="Wednesday" id="sdi3"
+                                     disclosureListener="#{scheduleController.showWednesday}"
+                                     styleClass="AFStretchWidth">
+                    <f:subview id="wed">
+                      <jsp:include page="/daySchedule.jsff"/>
+                    </f:subview>
+                  </af:showDetailItem>
+                  <af:showDetailItem text="Thursday" id="sdi4"
+                                     disclosureListener="#{scheduleController.showThursday}"
+                                     styleClass="AFStretchWidth">
+                    <f:subview id="thu">
+                      <jsp:include page="/daySchedule.jsff"/>
+                    </f:subview>
+                  </af:showDetailItem>
+                  <af:showDetailItem text="Friday" id="sdi5"
+                                     disclosureListener="#{scheduleController.showFriday}">
+                    <f:subview id="fri">
+                      <jsp:include page="/daySchedule.jsff"/>
+                    </f:subview>
+                  </af:showDetailItem>
+                  <af:showDetailItem text="Saturday" id="sdi6"
+                                     disclosureListener="#{scheduleController.showSaturday}">
+                    <f:subview id="sat">
+                      <jsp:include page="/daySchedule.jsff"/>
+                    </f:subview>
+                  </af:showDetailItem>
+                  <af:showDetailItem text="Sunday" id="sdi7"
+                                     disclosureListener="#{scheduleController.showSunday}">
+                    <f:subview id="sun">
+                      <jsp:include page="/daySchedule.jsff"/>
+                    </f:subview>
+                  </af:showDetailItem>
+                </af:panelTabbed>
+              </f:facet>
+            </af:panelStretchLayout>
+          </f:facet>
+        </af:pageTemplate>
+      </af:form>
+    </af:document>
+  </f:view>
+</jsp:root>

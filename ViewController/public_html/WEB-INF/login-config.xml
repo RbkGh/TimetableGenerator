@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<policy>
+  <application-policy name="scheduleSX">
+    <authentication>
+      <login-module code="org.jboss.security.auth.spi.DatabaseServerLoginModule" flag="required">
+         <module-option name="unauthenticatedIdentity">guest</module-option>
+         <module-option name="dsJndiName">java:/app/jdbc/jdbc/Openshift-TimetableDS</module-option>
+         <module-option name="principalsQuery">select password_hash from user where login_name=?</module-option>
+         <module-option name="rolesQuery">select role, 'roles' from user where login_name=?</module-option>
+        <module-option name="password-stacking" value="useFirstPass"/>
+      </login-module>
+    </authentication>
+  </application-policy>
+</policy>

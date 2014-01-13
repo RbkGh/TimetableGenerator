@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <f:view>
+    <af:document title="Current Schedule" id="d1">
+      <f:facet name="metaContainer">
+        <af:resource type="javascript">
+function showSchedule(event) {
+  var myDoc = event.getSource();
+  window.location = myDoc.getProperty("downloadUrl");
+}
+        </af:resource>
+      </f:facet>
+      <!-- document 'onLoad' event handler using ADF 11g functionality: use clientListener on <af:document> of type 'load' -->
+      <af:clientListener method="showSchedule" type="load"/> 
+      <!-- in handler, the event source will be an instance of AdfUIComponent, and its client attributes will be accessible via getProperty() method -->
+      <af:clientAttribute name="downloadUrl" value="#{pageFlowScope.downloadUrl}"/>
+    </af:document>
+  </f:view>
+</jsp:root>

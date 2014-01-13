@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+  <af:table id="dSt0" value="#{scheduleController.daySchedule}" var="row" styleClass="AFStretchWidth">
+    <af:forEach items="#{scheduleController.headerLine}" var="hdr" varStatus="hst">
+      <af:column id="d00" rowHeader="#{hst.index == 0}" inlineStyle="#{hst.index == 0 ? 'font-weight: bold;' : ''}">
+        <f:facet name="header">
+          <af:outputText id="hdTxt" value="&lt;b>#{hdr.name}&lt;/b>" escape="false"/>
+        </f:facet>
+        <af:outputText id="d0t0" value="#{hst.index == 0 ? row[hst.index].lesson.start : row[hst.index].htmlForRoom}"
+                        escape="false"/>
+      </af:column>
+    </af:forEach>
+  </af:table>
+</jsp:root>

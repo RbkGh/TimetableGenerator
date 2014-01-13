@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <f:view>
+    <af:document id="d1" title="Errors during the schedule genration">
+      <f:facet name="metaContainer">
+        <af:resource type="css">
+  .plain { font-size:10.0pt;font-family:Arial }
+  .info   { font-size:10.0pt;font-family:Arial;font-weight:normal;color:#33EE33 }
+  .warn   { font-size:10.0pt;font-family:Arial;font-weight:normal;color:#ee3333 }
+  .diag   { font-size:12.0pt;font-family:Arial;font-weight:bold;color:#FF3333 }
+  .exec   { font-size:10.0pt;font-family:Arial;font-weight:bold;color:#000000 }
+  body   { font-size:10.0pt;font-family:Arial;margin-left:10px }
+  h3     { font-size:12.0pt;text-indent:1em }
+  .critical    { color:#FF0000 }
+        </af:resource>
+      </f:facet>
+      <af:form id="f1">
+        <af:panelGroupLayout id="e1" layout="vertical">
+            <af:commandButton text="Close" id="c1">
+              <af:returnActionListener/>
+            </af:commandButton>
+            <af:spacer height="12px" id="s1"/>
+            <af:outputText id="t1" escape="false" value="#{scheduleController.errorsFormatted}"/>
+            <af:spacer height="32px" id="s2"/>
+            <af:commandButton text="Close" id="c2">
+              <af:returnActionListener/>
+            </af:commandButton>
+        </af:panelGroupLayout>
+      </af:form>
+    </af:document>
+  </f:view>
+</jsp:root>

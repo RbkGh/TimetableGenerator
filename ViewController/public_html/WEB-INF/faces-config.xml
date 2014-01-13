@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<faces-config version="1.2" xmlns="http://java.sun.com/xml/ns/javaee">
+  <application>
+    <default-render-kit-id>oracle.adf.rich</default-render-kit-id>
+  </application>
+  <managed-bean>
+    <managed-bean-name>availabilityController</managed-bean-name>
+    <managed-bean-class>edu.school.view.AvailabilityController</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+  <managed-bean>
+    <managed-bean-name>classGroupController</managed-bean-name>
+    <managed-bean-class>edu.school.view.ClassGroupController</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+  <managed-bean>
+    <managed-bean-name>classroomController</managed-bean-name>
+    <managed-bean-class>edu.school.view.ClassroomController</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+  <managed-bean>
+    <managed-bean-name>lessonController</managed-bean-name>
+    <managed-bean-class>edu.school.view.LessonController</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+  <managed-bean>
+    <managed-bean-name>scheduleController</managed-bean-name>
+    <managed-bean-class>edu.school.view.ScheduleController</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+  <managed-bean>
+    <managed-bean-name>subjectController</managed-bean-name>
+    <managed-bean-class>edu.school.view.SubjectController</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+  <managed-bean>
+    <managed-bean-name>teacherController</managed-bean-name>
+    <managed-bean-class>edu.school.view.TeacherController</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+  <managed-bean>
+    <managed-bean-name>userController</managed-bean-name>
+    <managed-bean-class>edu.school.view.UserController</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+</faces-config>

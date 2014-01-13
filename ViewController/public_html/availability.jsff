@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+  <af:panelGroupLayout id="avPG" layout="vertical" styleClass="AFStretchWidth">
+  <af:spacer id="avsppa" height="5px"/>
+  <af:table value="#{availabilityController.items}" var="item" id="avTable" varStatus="row"
+            autoHeightRows="15" styleClass="AFStretchWidth" rowBandingInterval="1"
+            partialTriggers="ac2L ac3L ac4L ac5L ac6L ac7L ac8L">
+      <af:column id="ac1">
+          <f:facet name="header">
+              <af:outputText id="ac1Ha" value="Lesson"/>
+          </f:facet>
+          <af:outputText id="ac1Hb" value="#{item.lesson.start}"/>
+      </af:column>
+      <af:column id="ac2">
+          <f:facet name="header">
+              <af:outputText id="ac2Ha" value="Monday"/>
+          </f:facet>
+          <af:commandImageLink id="ac2L" actionListener="#{availabilityController.flipAL}" partialSubmit="true"
+                               icon="#{item.mondayBool ? '/images/yes.gif' : '/images/no.gif'}" 
+                               inlineStyle="width:16px; height:16px;" 
+                               shortDesc="#{item.mondayBool ? 'available' : 'not available'}"
+                               disabled="#{availabilityController.readOnly}"
+                               partialTriggers="ac2L"
+                               disabledIcon="#{item.mondayBool ? '/images/yes.gif' : '/images/no.gif'}">
+            <af:setPropertyListener from="#{row.index}" to="#{requestScope.lessonIdx}" type="action"/>
+            <af:setPropertyListener from="#{'Monday'}" to="#{requestScope.day}" type="action"/>
+          </af:commandImageLink>
+      </af:column>
+      <af:column id="ac3">
+          <f:facet name="header">
+              <af:outputText id="ac3Ha" value="Tuesday"/>
+          </f:facet>
+          <af:commandImageLink id="ac3L" actionListener="#{availabilityController.flipAL}" partialSubmit="true"
+                               icon="#{item.tuesdayBool ? '/images/yes.gif' : '/images/no.gif'}" 
+                               inlineStyle="width:16px; height:16px;" 
+                               shortDesc="#{item.tuesdayBool ? 'available' : 'not available'}"
+                               disabled="#{availabilityController.readOnly}"
+                               partialTriggers="ac3L"
+                               disabledIcon="#{item.tuesdayBool ? '/images/yes.gif' : '/images/no.gif'}">
+            <af:setPropertyListener from="#{row.index}" to="#{requestScope.lessonIdx}" type="action"/>
+            <af:setPropertyListener from="#{'Tuesday'}" to="#{requestScope.day}" type="action"/>
+          </af:commandImageLink>
+      </af:column>
+      <af:column id="ac4">
+          <f:facet name="header">
+              <af:outputText id="ac4Ha" value="Wednesday"/>
+          </f:facet>
+          <af:commandImageLink id="ac4L" actionListener="#{availabilityController.flipAL}" partialSubmit="true"
+                               icon="#{item.wednesdayBool ? '/images/yes.gif' : '/images/no.gif'}" 
+                               inlineStyle="width:16px; height:16px;" 
+                               shortDesc="#{item.wednesdayBool ? 'available' : 'not available'}"
+                               partialTriggers="ac4L"
+                               disabled="#{availabilityController.readOnly}"
+                               disabledIcon="#{item.wednesdayBool ? '/images/yes.gif' : '/images/no.gif'}">
+            <af:setPropertyListener from="#{row.index}" to="#{requestScope.lessonIdx}" type="action"/>
+            <af:setPropertyListener from="#{'Wednesday'}" to="#{requestScope.day}" type="action"/>
+          </af:commandImageLink>
+      </af:column>
+      <af:column id="ac5">
+          <f:facet name="header">
+              <af:outputText id="ac5Ha" value="Thursday"/>
+          </f:facet>
+          <af:commandImageLink id="ac5L" actionListener="#{availabilityController.flipAL}" partialSubmit="true"
+                               icon="#{item.thursdayBool ? '/images/yes.gif' : '/images/no.gif'}" 
+                               inlineStyle="width:16px; height:16px;" 
+                               shortDesc="#{item.thursdayBool ? 'available' : 'not available'}"
+                               partialTriggers="ac5L"
+                               disabled="#{availabilityController.readOnly}"
+                               disabledIcon="#{item.thursdayBool ? '/images/yes.gif' : '/images/no.gif'}">
+            <af:setPropertyListener from="#{row.index}" to="#{requestScope.lessonIdx}" type="action"/>
+            <af:setPropertyListener from="#{'Thursday'}" to="#{requestScope.day}" type="action"/>
+          </af:commandImageLink>
+      </af:column>
+      <af:column id="ac6">
+          <f:facet name="header">
+              <af:outputText id="ac6Ha" value="Friday"/>
+          </f:facet>
+          <af:commandImageLink id="ac6L" actionListener="#{availabilityController.flipAL}" partialSubmit="true"
+                               icon="#{item.fridayBool ? '/images/yes.gif' : '/images/no.gif'}" 
+                               inlineStyle="width:16px; height:16px;" 
+                               shortDesc="#{item.fridayBool ? 'available' : 'not available'}"
+                               partialTriggers="ac6L"
+                               disabled="#{availabilityController.readOnly}"
+                               disabledIcon="#{item.fridayBool ? '/images/yes.gif' : '/images/no.gif'}">
+            <af:setPropertyListener from="#{row.index}" to="#{requestScope.lessonIdx}" type="action"/>
+            <af:setPropertyListener from="#{'Friday'}" to="#{requestScope.day}" type="action"/>
+          </af:commandImageLink>
+      </af:column>
+      <af:column id="ac7">
+          <f:facet name="header">
+              <af:outputText id="ac7Ha" value="Saturday"/>
+          </f:facet>
+          <af:commandImageLink id="ac7L"
+                               actionListener="#{availabilityController.flipAL}" partialSubmit="true"
+                               icon="#{item.saturdayBool ? '/images/yes.gif' : '/images/no.gif'}" 
+                               inlineStyle="width:16px; height:16px;" 
+                               shortDesc="#{item.saturdayBool ? 'available' : 'not available'}"
+                               partialTriggers="ac7L"
+                               disabled="#{availabilityController.readOnly}"
+                               disabledIcon="#{item.saturdayBool ? '/images/yes.gif' : '/images/no.gif'}">
+            <af:setPropertyListener from="#{row.index}" to="#{requestScope.lessonIdx}" type="action"/>
+            <af:setPropertyListener from="#{'Saturday'}" to="#{requestScope.day}" type="action"/>
+          </af:commandImageLink>
+      </af:column>
+      <af:column id="ac8">
+          <f:facet name="header">
+              <af:outputText id="ac8Ha" value="Sunday"/>
+          </f:facet>
+          <af:commandImageLink id="ac8L" actionListener="#{availabilityController.flipAL}" partialSubmit="true"
+                               icon="#{item.sundayBool ? '/images/yes.gif' : '/images/no.gif'}" 
+                               inlineStyle="width:16px; height:16px;" 
+                               shortDesc="#{item.sundayBool ? 'available' : 'not available'}"
+                               partialTriggers="ac8L"
+                               disabled="#{availabilityController.readOnly}"
+                               disabledIcon="#{item.sundayBool ? '/images/yes.gif' : '/images/no.gif'}">
+            <af:setPropertyListener from="#{row.index}" to="#{requestScope.lessonIdx}" type="action"/>
+            <af:setPropertyListener from="#{'Sunday'}" to="#{requestScope.day}" type="action"/>
+          </af:commandImageLink>
+      </af:column>
+      <!--
+      <af:column rendered="#{!availabilityController.readOnly}" id="ac9">
+          <f:facet name="header">
+              <af:outputText value="&nbsp;" id="ac9Ha"/>
+          </f:facet>
+          <af:commandButton action="#{availabilityController.prepareEdit}" text="Change Available Lessons"/>
+      </af:column>
+      -->
+  </af:table>
+  <af:spacer id="avsppb" height="5px"/>
+  </af:panelGroupLayout>
+</jsp:root>

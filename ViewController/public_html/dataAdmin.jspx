@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <f:view>
+    <af:document id="d1" title="Data Administration">
+      <af:form id="f1">
+        <af:pageTemplate viewId="/template/tabbedPage.jspx" id="pt1">
+          <f:facet name="dashboard">
+            <af:panelTabbed id="ptb1" styleClass="AFStretchWidth">
+              <af:showDetailItem text="Teachers" id="sdi1" >
+                <af:panelBox id="dbT" showDisclosure="false" type="stretch" styleClass="AFStretchWidth" text=" ">
+                  <f:subview id="tch">
+                    <jsp:include page="/teachers.jsff"/>
+                  </f:subview>
+                </af:panelBox>
+              </af:showDetailItem>
+              <af:showDetailItem text="Class Groups" id="sdi2">
+                <af:panelBox id="dbCG" showDisclosure="false" type="stretch" text=" ">
+                  <f:subview id="cgt">
+                    <jsp:include page="/classGroups.jsff"/>
+                  </f:subview>
+                </af:panelBox>
+              </af:showDetailItem>
+              <af:showDetailItem text="Lessons / Time" id="sdi3">
+                <af:decorativeBox id="dbL">
+                  <f:facet name="center">
+                    <f:subview id="lsn">
+                      <jsp:include page="/lessons.jsff"/>
+                    </f:subview>
+                  </f:facet>
+                </af:decorativeBox>
+              </af:showDetailItem>
+              <af:showDetailItem text="Subjects" id="sdi4">
+                <af:decorativeBox id="dbS">
+                  <f:facet name="center">
+                    <f:subview id="sbj">
+                      <jsp:include page="/subjectList.jsff"/>
+                    </f:subview>
+                  </f:facet>
+                </af:decorativeBox>
+              </af:showDetailItem>
+              <af:showDetailItem text="Classrooms" id="sdi5">
+                <af:decorativeBox id="dbR">
+                  <f:facet name="center">
+                    <f:subview id="crm">
+                      <jsp:include page="/classrooms.jsff"/>
+                    </f:subview>
+                  </f:facet>
+                </af:decorativeBox>
+              </af:showDetailItem>
+            </af:panelTabbed>
+          </f:facet>
+        </af:pageTemplate>
+      </af:form>
+    </af:document>
+  </f:view>
+</jsp:root>

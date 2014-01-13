@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <af:pageTemplateDef var="attrs">
+    <af:xmlContent>
+      <component xmlns="http://xmlns.oracle.com/adf/faces/rich/component">
+        <display-name>tabbedPage</display-name>
+        <facet>
+          <description>Main panel to show the data</description>
+          <facet-name>dashboard</facet-name>
+        </facet>
+        <attribute>
+          <description>Page Name</description>
+          <attribute-name>pageName</attribute-name>
+        </attribute>
+      </component>
+    </af:xmlContent>
+    <af:panelStretchLayout id="pt_ps2" topHeight="54pt">
+      <f:facet name="top">
+        <af:panelStretchLayout id="brLogo"
+                               startWidth="232px" endWidth="150px"
+                               inlineStyle="background-image: url('images/UnifiLogoBackground.png')">
+          <f:facet name="start">
+            <af:panelGroupLayout id="dba" layout="horizontal">
+              <af:image id="spLogo"  shortDesc="#{cookie['JSESSIONID'].value} @ #{request.localName}"
+                        source="/images/UnifiLogo.png"/>
+              <!--af:spacer id="spLg1" width="15"/>
+              <af:outputText value=" a branding text" id="tot1"
+                             inlineStyle="font-size:16pt"/-->
+            </af:panelGroupLayout>
+          </f:facet>
+          <f:facet name="center">
+            <af:panelStretchLayout id="msp" startWidth="3%" endWidth="3%"
+                                   topHeight="30%" bottomHeight="30%"
+                                   inlineStyle="color:blue; font-weight:bold;">
+            <f:facet name="start">
+              <af:outputText id="plhA" value=" "/>
+            </f:facet>
+            <f:facet name="top">
+              <af:outputText id="plhB" value=" "/>
+            </f:facet>
+            <f:facet name="bottom">
+              <af:outputText id="plhC" value=" "/>
+            </f:facet>
+            <f:facet name="end">
+              <af:outputText id="plhD" value=" "/>
+            </f:facet>
+            <f:facet name="center">
+            <af:navigationPane id="nppA" hint="bar"
+                               level="0"
+                               >
+                <af:commandNavigationItem text="Data Management" id="cniA"
+                                          action="dataAdmin"
+                                          inlineStyle="color:White; font-size:small; font-weight:bold;"/>
+                <af:commandNavigationItem text="Time Schedule" id="cniB"
+                                          action="#{scheduleController.initialize}" 
+                                          inlineStyle="color:White; font-size:small; font-weight:bold;">
+                  <af:setPropertyListener from="#{'load'}" to="#{pageFlowScope.actionType}" type="action"/>
+                </af:commandNavigationItem>
+                <af:commandNavigationItem text="Log-out" id="cniC"
+                                          action="#{userController.logout}"
+                                          inlineStyle="color:White; font-size:small; font-weight:bold;"/>
+            </af:navigationPane>
+            </f:facet>
+            </af:panelStretchLayout>
+          </f:facet>
+          <f:facet name="end">
+            <af:panelGroupLayout id="uunn" layout="horizontal"
+                                 inlineStyle="vertical-align:middle; text-align:right;">
+            <af:outputText id="uuid" value="Logged in as [#{securityContext.userName}]" inlineStyle="color:white;"/>
+            <af:statusIndicator id="statInd" inlineStyle="margin:20.0pt;"/>
+            </af:panelGroupLayout>
+          </f:facet>
+        </af:panelStretchLayout>
+      </f:facet>
+      <f:facet name="center">
+        <af:facetRef facetName="dashboard"/>
+      </f:facet>
+    </af:panelStretchLayout>
+  </af:pageTemplateDef>
+</jsp:root>

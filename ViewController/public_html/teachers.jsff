@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+  <af:panelCollection id="pcT" featuresOff="statusBar detach viewMenu" 
+                      defaultToolbarItemDisplay="icon"
+                      partialTriggers="tAdd tEdit tTeachr:mtEdit tDelete">
+    <f:facet name="toolbar">
+      <af:toolbar id="ttb">
+        <af:popup id="tchEdit" launcherVar="source"
+                  eventContext="launcher"
+                  contentDelivery="lazyUncached"
+                  popupFetchListener="#{teacherController.selectPFL}"
+                  binding="#{teacherController.tableEditPopup}">
+          <af:setPropertyListener from="#{source.attributes.which}"
+                                  to="#{pageFlowScope.which}"
+                                  type="popupFetch"/>
+          <af:dialog id="tchD" title="#{pageFlowScope.which=='Add' ? 'Create New' : 'Modify/Review'} Teacher"
+                     type="none" stretchChildren="first" resize="on" contentWidth="900" contentHeight="600"
+                     dialogListener="#{teacherController.onEditClose}">
+            <af:panelStretchLayout id="tchDL" dimensionsFrom="children" topHeight="0px" startWidth="0px">
+              <f:facet name="center">
+                <af:panelGroupLayout id="tchDG" layout="vertical">
+                  <af:panelFormLayout labelWidth="40%" id="tchPfA">
+                    <af:inputText label="First Name" id="tchItA" readOnly="#{teacherController.readOnly}"
+                                  value="#{teacherController.current.firstName}"/>
+                    <af:inputText label="Surname" id="tchItAA" readOnly="#{teacherController.readOnly}"
+                                  value="#{teacherController.current.lastName}"/>
+                    <af:inputText label="Initials" id="tchItB" readOnly="#{teacherController.readOnly}"
+                                  value="#{teacherController.current.initials}"/>
+                    <af:inputText label="Address" id="tchItC" readOnly="#{teacherController.readOnly}"
+                                  value="#{teacherController.current.address}"/>
+                    <af:inputText label="Phone" id="tchItF" readOnly="#{teacherController.readOnly}"
+                                  value="#{teacherController.current.phone}"/>
+                    <af:selectBooleanCheckbox label="Can Substitute"
+                                        id="tchSOB" readOnly="#{teacherController.readOnly}"
+                                        value="#{teacherController.current.canSubstituteBool}"/>
+                  </af:panelFormLayout>
+                  <af:spacer id="tchSpB" height="10px"/>
+                  <af:outputFormatted value="Subjects &lt;b>#{teacherController.current.firstName}&lt;/b> can teach:" id="tchSBjt"/>
+                  <af:table value="#{teacherController.selected.subjectCollection}" var="item"
+                                  autoHeightRows="0" id="tSbjTb" styleClass="AFStretchWidth"
+                                  summary="Subjects this teacher can teach">
+                      <af:column id="tcSc1" rowHeader="unstyled">
+                          <f:facet name="header">
+                              <af:outputText id="tsbHa" value="Subject"/>
+                          </f:facet>
+                          <af:outputText id="tsbHb" value="#{item.name}"/>
+                      </af:column>
+                      <af:column id="tcSc2" headerText=" " rendered="#{!teacherController.readOnly}">
+                          <af:commandLink id="tsbHc" action="#{teacherController.removeSubject}" >
+                              <af:image id="tsbHd" shortDesc="Delete" source="/images/delete.gif" inlineStyle="width: 14pt; height: 14pt;"/>
+                              <f:param id="tsbHe" name="subjectName" value="#{item.name}"/>
+                          </af:commandLink>
+                      </af:column>
+                  </af:table>
+                  <af:selectOneChoice id="sbjSelect" value="#{teacherController.subject}" label="Available Subjects"
+                                      rendered="#{!teacherController.readOnly}">
+                    <f:selectItems value="#{teacherController.availableSubjects}"/>
+                  </af:selectOneChoice>
+                  <af:commandButton action="#{teacherController.addSubject}" text="Add Subject" 
+                                    partialSubmit="true" id="adSbjB"
+                                    rendered="#{!teacherController.readOnly}"/>
+                  <af:spacer id="tchSpA" height="10px"/>
+                  <af:separator id="tchSep"/>
+                  <af:outputFormatted value="Hours when &lt;b>#{teacherController.current.firstName}&lt;/b> can teach:" id="tchSBjy"/>
+                  <f:subview id="tchAV">
+                    <jsp:include page="/availability.jsff"/>
+                  </f:subview>
+                  <af:outputFormatted id="tchATip" value="Click on the icon in the above table to change the value."
+                                      inlineStyle="font-size: 7pt;" rendered="#{!teacherController.readOnly}"/>
+                </af:panelGroupLayout>
+              </f:facet>
+            </af:panelStretchLayout>
+            <f:facet name="buttonBar">
+              <af:panelGroupLayout id="sSnpBB"
+                                   layout="horizontal">
+                <af:commandButton text="Save"
+                                  id="aMSave"
+                                  actionListener="#{teacherController.saveAL}"
+                                  rendered="#{pageFlowScope.which!='view'}"
+                                  partialSubmit="true"/>
+                <af:commandButton text="#{pageFlowScope.which!='view' ? 'Cancel' : 'Close'}" id="tchCl"
+                                  actionListener="#{teacherController.cancelAL}"
+                                  partialSubmit="true"/>
+              </af:panelGroupLayout>
+            </f:facet>
+          </af:dialog>
+        </af:popup>
+        <af:commandButton id="tAdd" action="newTeacher" text="Add Teacher" partialSubmit="true">
+          <af:clientAttribute value="add" name="which"/>
+          <af:showPopupBehavior popupId="tchEdit" triggerType="action"/>
+        </af:commandButton>
+        <af:commandButton id="tEdit" action="editTeacher" text="Edit" partialSubmit="true">
+          <af:clientAttribute value="edit" name="which"/>
+          <af:showPopupBehavior popupId="tchEdit" triggerType="action"/>
+        </af:commandButton>
+        <af:commandButton id="tDelete" text="Delete" partialSubmit="true">
+          <af:clientAttribute name="first" value="#{teacherController.selected.firstName}"/>
+          <af:clientAttribute name="last" value="#{teacherController.selected.lastName}"/>
+          <af:showPopupBehavior popupId="dltConfrm" triggerType="action"/>
+        </af:commandButton>
+        <af:popup id="dltConfrm" eventContext="launcher" binding="#{teacherController.confirmDeletePopup}"
+                                        launcherVar="s"
+                  popupFetchListener="#{teacherController.selectPFL}">
+          <af:setPropertyListener from="#{s.attributes.first}" to="#{viewScope.first}" type="popupFetch"/>
+          <af:setPropertyListener from="#{s.attributes.last}" to="#{viewScope.last}" type="popupFetch"/>
+          <af:dialog id="dltDlg" dialogListener="#{teacherController.onConfirmDeleteClose}" 
+                    title="Confirm Delete" type="okCancel">
+            <af:outputText id="dltTxt" value="You are going to delete teacher #{s.attributes.first} #{viewScope.last}. Proceed?"/>
+          </af:dialog>
+        </af:popup>
+      </af:toolbar>
+    </f:facet>
+    <af:table id="tTeachr" value="#{teacherController.items}" var="tch"
+              rowBandingInterval="1" 
+              styleClass="AFStretchWidth" width="100%"
+              autoHeightRows="0"
+              rowSelection="single"
+              columnStretching="multiple"
+              binding="#{teacherController.table}">
+        <f:facet name="contextMenu">
+          <af:popup id="tchCtxMenu"
+                    contentDelivery="lazyUncached">
+            <af:menu id="acm_2">
+              <af:commandMenuItem id="mtEdit"
+                                  text="Edit"
+                                  partialSubmit="true"
+                                  actionListener="#{teacherController.editAL}">
+                <af:clientAttribute value="edit" name="which"/>
+                <af:showPopupBehavior popupId="::tchEdit" triggerType="action"/>
+              </af:commandMenuItem>
+              <af:commandMenuItem id="mtDelete"
+                                  text="Delete"
+                                  partialSubmit="true"
+                          actionListener="#{teacherController.deleteAL}">
+                <af:clientAttribute name="first" value="#{tch.firstName}"/>
+                <af:clientAttribute name="last" value="#{tch.lastName}"/>
+                <af:showPopupBehavior popupId="::dltConfrm" triggerType="action"/>
+              </af:commandMenuItem>
+            </af:menu>
+          </af:popup>
+        </f:facet>
+      <af:column id="c1" rowHeader="true" headerText="First Name" width="16%">
+        <af:commandLink id="mtView" text="#{tch.firstName}"
+                    actionListener="#{teacherController.selectAL}">
+          <af:clientAttribute value="view" name="which"/>
+          <af:showPopupBehavior popupId="::tchEdit" triggerType="action"/>
+        </af:commandLink>
+        <af:spacer id="avSp" width="5px" rendered="#{availabilityController.readOnly}"/>
+      </af:column>
+      <af:column id="c2" headerText="Surname" width="16%">
+        <af:outputText id="c2a" value="#{tch.lastName}"/>
+      </af:column>
+      <af:column id="c3" headerText="Initials" width="8%">
+        <af:outputText id="c3a" value="#{tch.initials}"/>
+      </af:column>
+      <af:column id="c4" headerText="Address" width="37%">
+        <af:outputText id="c4a" value="#{tch.address}"/>
+      </af:column>
+      <af:column id="c5" headerText="Phone" width="15%">
+        <af:outputText id="c5a" value="#{tch.phone}"/>
+      </af:column>
+      <af:column id="c6" headerText="Can Substitute" width="8%">
+        <af:image id="c6i" source="#{tch.canSubstitute==1 ? '/images/yes.gif' : '/images/no.gif'}" inlineStyle="width:9px; height:9px" shortDesc="#{tch.canSubstitute==1 ? 'yes' : 'no'}"/>
+      </af:column>
+    </af:table>
+  </af:panelCollection>
+</jsp:root>
