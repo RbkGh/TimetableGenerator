@@ -14,6 +14,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import javax.persistence.Transient;
+
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
@@ -37,7 +39,9 @@ public class Classroom extends UserIdJpaEntity implements Serializable {
   private List<ClassGroup> classGroupList;
   @OneToMany(mappedBy = "classroom")
   private List<Subject> subjectList;
-
+  @Transient
+  private String prefSubjectName;
+  
   public Classroom() {
   }
 
@@ -155,4 +159,12 @@ public class Classroom extends UserIdJpaEntity implements Serializable {
     return xml.toString();
   }
 
+  @XmlTransient
+  public String getPrefSubjectName() {
+    return prefSubjectName;
+  }
+
+  public void setPrefSubjectName(String prefSubjectName) {
+    this.prefSubjectName = prefSubjectName;
+  }
 }

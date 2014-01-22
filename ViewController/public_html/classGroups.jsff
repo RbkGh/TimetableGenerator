@@ -16,7 +16,7 @@
                                   to="#{pageFlowScope.which}"
                                   type="popupFetch"/>
           <af:dialog id="tchD" title="#{pageFlowScope.which=='Add' ? 'Create New' : 'Modify/Review'} Class Group"
-                     type="none" stretchChildren="first" resize="on" contentWidth="600" contentHeight="750"
+                     type="none" stretchChildren="first" resize="on" contentWidth="750" contentHeight="500"
                      dialogListener="#{classGroupController.onEditClose}">
             <af:panelStretchLayout id="tchDL" dimensionsFrom="children" topHeight="0px" startWidth="0px">
               <f:facet name="center">

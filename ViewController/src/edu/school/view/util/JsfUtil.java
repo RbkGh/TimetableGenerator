@@ -6,10 +6,11 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
+import edu.school.jpa.AbstractJpaEntity;
 
 public class JsfUtil {
 
-    public static SelectItem[] getSelectItems(List<?> entities, boolean selectOne) {
+    public static SelectItem[] getSelectItems(List<AbstractJpaEntity> entities, boolean selectOne) {
         int size = selectOne ? entities.size() + 1 : entities.size();
         SelectItem[] items = new SelectItem[size];
         int i = 0;
@@ -17,8 +18,8 @@ public class JsfUtil {
             items[0] = new SelectItem("", "---");
             i++;
         }
-        for (Object x : entities) {
-            items[i++] = new SelectItem(x, x.toString());
+        for (AbstractJpaEntity x : entities) {
+            items[i++] = new SelectItem(x.getEID(), x.toString());
         }
         return items;
     }

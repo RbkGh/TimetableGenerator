@@ -118,7 +118,7 @@
         <af:outputText id="c3a" value="#{clrm.capacity}"/>
       </af:column>
       <af:column id="c4" headerText="Preferred Subject">
-        <af:outputText id="c4a" value="#{clrm.prefSubject}"/>
+        <af:outputText id="c4a" value="#{clrm.prefSubjectName}"/>
       </af:column>
     </af:table>
   </af:panelCollection>

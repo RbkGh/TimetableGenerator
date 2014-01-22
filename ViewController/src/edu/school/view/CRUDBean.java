@@ -241,6 +241,9 @@ public class CRUDBean {
           }
         }
       } 
+      if (table != null) {
+        RequestContext.getCurrentInstance().addPartialTarget(table);
+      }
   }
 
   /**
@@ -248,18 +251,21 @@ public class CRUDBean {
    * @param dialogEvent
    */
   public void onConfirmRemoveClose(DialogEvent dialogEvent) {
-      if (dialogEvent.getOutcome().equals(DialogEvent.Outcome.ok)) {
-        current = getSelectedRow();
-        if (current != null) {
-          try {
-            getFacade().remove(current,jpaClass);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,jpaClassName+" Removed",jpaClassName+" ID ["+current.getEID()+"] has been removed from list."));
-          } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,jpaClassName+" Delete Error",jpaClassName+" ID ["+current.getEID()+"] has NOT been removed from the list due to: "+e.getMessage()));
-            e.printStackTrace();
-          }
+    if (dialogEvent.getOutcome().equals(DialogEvent.Outcome.ok)) {
+      current = getSelectedRow();
+      if (current != null) {
+        try {
+          getFacade().remove(current,jpaClass);
+          FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,jpaClassName+" Removed",jpaClassName+" ID ["+current.getEID()+"] has been removed from list."));
+        } catch (Exception e) {
+          FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,jpaClassName+" Delete Error",jpaClassName+" ID ["+current.getEID()+"] has NOT been removed from the list due to: "+e.getMessage()));
+          e.printStackTrace();
         }
-      } 
+      }
+    } 
+    if (table != null) {
+      RequestContext.getCurrentInstance().addPartialTarget(table);
+    }
   }
 
   public DataModel getItems() {

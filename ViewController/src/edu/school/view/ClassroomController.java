@@ -1,6 +1,7 @@
 package edu.school.view;
 
 import edu.school.jpa.Classroom;
+import edu.school.jpa.Subject;
 import edu.school.view.util.JsfUtil;
 import edu.school.view.util.PaginationHelper;
 
@@ -32,7 +33,10 @@ public class ClassroomController extends CRUDBean implements Serializable {
         return (Classroom)super.getSelectedRow();
     }
 
-
+    public Classroom getCurrent() {
+      return (Classroom)super.getCurrent();
+    }
+    
     private SelectItem[] classroomItems = null;
     @Override
     public SelectItem[] getItemsAvailableSelectOne() {
@@ -64,7 +68,25 @@ public class ClassroomController extends CRUDBean implements Serializable {
         return (Classroom)getFacade().find(id,Classroom.class);
     }
 
-    //@FacesConverter(forClass = Classroom.class)
+  @Override
+  public DataModel getItems() {
+      DataModel items = super.getItems();
+      List<Classroom> rooms = (List<Classroom>)items.getWrappedData();
+      List<Subject> subjs = (List<Subject>)SubjectController.getInstance().getItems().getWrappedData();
+      if (subjs != null && rooms != null) {
+        for (Classroom room : rooms) {
+          for (Subject subj : subjs) {
+            if (subj.getId().equals(room.getPrefSubject())) {
+              room.setPrefSubjectName(subj.getName());
+              break;
+            }
+          }
+        }
+      }
+      return items;
+  }
+
+  //@FacesConverter(forClass = Classroom.class)
     public static class ClassroomControllerConverter implements Converter {
 
         @Override
