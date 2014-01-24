@@ -1,6 +1,8 @@
 package edu.school.view;
 
 import edu.school.jpa.ClassGroup;
+import edu.school.jpa.ClassSubjectCount;
+import edu.school.jpa.ClassSubjectCountPK;
 import edu.school.jpa.Classroom;
 import edu.school.jpa.Subject;
 
@@ -11,14 +13,20 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import java.util.Map;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
+import oracle.adf.share.ADFContext;
+import oracle.adf.view.rich.component.rich.RichPopup;
+import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.event.PopupFetchEvent;
 
+import org.apache.myfaces.trinidad.context.RequestContext;
 import org.apache.myfaces.trinidad.event.LaunchEvent;
 
 //import javax.faces.convert.FacesConverter;
@@ -29,8 +37,10 @@ public class ClassGroupController extends CRUDBean implements Serializable {
     private Subject subject;
     private String  subjectCount;
     private Integer classroomId;
-    
-    public ClassGroupController() {
+  private RichPopup editSubjectPopup;
+  private RichTable subjectPopupTable;
+
+  public ClassGroupController() {
       super(ClassGroup.class);
     }
 
@@ -121,6 +131,43 @@ public class ClassGroupController extends CRUDBean implements Serializable {
         group.setClassroom(room);
       }
     }
+  }
+
+  public void setEditSubjectPopup(RichPopup editSubjectPopup) {
+    this.editSubjectPopup = editSubjectPopup;
+  }
+
+  public RichPopup getEditSubjectPopup() {
+    return editSubjectPopup;
+  }
+
+  @Override
+  public void saveAL(ActionEvent actionEvent) {
+    super.saveAL(actionEvent);
+  }
+
+  public void saveSubjAL(ActionEvent actionEvent) {
+    if (actionEvent.getComponent().getId().contains("Save")) {
+      Map<String, Object> flowScope = ADFContext.getCurrent().getPageFlowScope();
+      Subject selectedSubj = (Subject)subjectPopupTable.getSelectedRowData();
+      String count = (String)flowScope.get("subjectCount");
+      if (count != null) {
+        try {
+          selectedSubj.setCount(Integer.parseInt(count));
+          getEjbFacade().setSubjectCount(getSelected(), selectedSubj, Integer.parseInt(count));
+        } catch (Exception ignore) {}
+      }
+      RequestContext.getCurrentInstance().addPartialTarget(subjectPopupTable);
+    }
+    editSubjectPopup.hide();
+  }
+
+  public void setSubjectPopupTable(RichTable subjectPopupTable) {
+    this.subjectPopupTable = subjectPopupTable;
+  }
+
+  public RichTable getSubjectPopupTable() {
+    return subjectPopupTable;
   }
 
   //    @FacesConverter(forClass = ClassGroup.class)
@@ -251,6 +298,15 @@ public class ClassGroupController extends CRUDBean implements Serializable {
     avcontroller.setReadOnly(source.contains("View"));
     if (cg.getAvailabilityId() == null) {
       cg.setAvailabilityId(avcontroller.getMaxOwner()+1);
+    }
+    Collection<Subject> cgSubjects = cg.getSubjectCollection();
+    if (cgSubjects != null) {
+      for (Subject s : cgSubjects) {
+        ClassSubjectCount classSubjectCount = getEjbFacade().getSubjectCount(cg, s);
+        if (classSubjectCount != null) {
+          s.setCount(classSubjectCount.getSubject_count());
+        }
+      }
     }
   }
 

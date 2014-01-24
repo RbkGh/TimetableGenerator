@@ -39,25 +39,68 @@
                   <af:outputFormatted value="Subjects the class group &lt;b>#{classGroupController.current.name}&lt;/b> will study:" id="tchSBjt"/>
                   <af:table value="#{classGroupController.selected.subjectCollection}" var="item"
                                   autoHeightRows="0" id="tSbjTb" styleClass="AFStretchWidth"
-                                  summary="Subjects this Class Group will study">
+                                  rowSelection="single"
+                                  summary="Subjects this Class Group will study"
+                            binding="#{classGroupController.subjectPopupTable}">
                       <af:column id="tcSc1" rowHeader="unstyled">
                           <f:facet name="header">
                               <af:outputText id="tsbHa" value="Subject"/>
                           </f:facet>
                           <af:outputText id="tsbHb" value="#{item.name}"/>
                       </af:column>
+                      <af:column id="tsSc3" headerText="Count">
+                        <af:outputText id="scnt" value="#{item.count}"/>
+                      </af:column>
                       <af:column id="tcSc2" headerText=" " rendered="#{!classGroupController.readOnly}">
+                        <af:panelGroupLayout id="hrzB" layout="horizontal">
+                          <af:commandImageLink id="sbjEdt" icon="/images/edit.gif" shortDesc="Edit">
+                            <af:showPopupBehavior popupId="edtSbjPp" triggerType="action"/>
+                            <af:clientAttribute value="#{item.name}" name="name"/>
+                            <af:clientAttribute value="#{item.count}" name="count"/>
+                          </af:commandImageLink>
+                          <af:spacer id="spcB" width="8px"/>
                           <af:commandLink id="tsbHc" action="#{classGroupController.removeSubject}" >
                               <af:image id="tsbHd" shortDesc="Delete" source="/images/delete.gif" inlineStyle="width: 14pt; height: 14pt;"/>
                               <f:param id="tsbHe" name="subjectName" value="#{item.name}"/>
                           </af:commandLink>
+                        </af:panelGroupLayout>
+                        <af:popup id="edtSbjPp" contentDelivery="lazy" eventContext="launcher" launcherVar="v"
+                                  binding="#{classGroupController.editSubjectPopup}">
+                          <af:setPropertyListener from="#{v.attributes.name}"
+                                                  to="#{pageFlowScope.subjectName}"
+                                                  type="popupFetch"/>
+                          <af:setPropertyListener from="#{v.attributes.count}"
+                                                  to="#{pageFlowScope.subjectCount}"
+                                                  type="popupFetch"/>
+                          <af:dialog id="edtDbjDg" modal="true" contentHeight="150" contentWidth="250" 
+                                      type="none" title="Change subject count" resize="on" >
+                            <af:panelGroupLayout id="edtSbjHz" layout="horizontal">
+                              <af:inputText id="edtSbCntI" label="#{pageFlowScope.subjectName} Count: " value="#{pageFlowScope.subjectCount}"/>
+                            </af:panelGroupLayout>
+                            <f:facet name="buttonBar">
+                              <af:panelGroupLayout id="savSbjHz" layout="horizontal">
+                                <af:commandButton text="Save"
+                                  id="aSSave"
+                                  actionListener="#{classGroupController.saveSubjAL}"
+                                  partialSubmit="true"/>
+                                <af:commandButton text="Cancel" id="aSCancel"
+                                  actionListener="#{classGroupController.saveSubjAL}"
+                                  partialSubmit="true"/>
+                              </af:panelGroupLayout>
+                            </f:facet>
+                          </af:dialog>
+                        </af:popup>
                       </af:column>
                   </af:table>
                   <af:spacer id="btwSPa" height="10pt"/>
+                  <af:panelGroupLayout id="hrz" layout="horizontal">
                   <af:selectOneChoice id="sbjSelect" value="#{classGroupController.subject}" label="Available Subjects"
                                       rendered="#{!classGroupController.readOnly}">
                     <f:selectItems value="#{classGroupController.availableSubjects}"/>
                   </af:selectOneChoice>
+                  <af:spacer id="hrzSp" width="20px"/>
+                  <af:inputText id="sCntIT" value="#{classGroupController.subjectCount}" label="Count: "/>
+                  </af:panelGroupLayout>
                   <af:commandButton action="#{classGroupController.addSubject}" text="Add Subject" 
                                     partialSubmit="true" id="adSbjB"
                                     rendered="#{!classGroupController.readOnly}"/>
